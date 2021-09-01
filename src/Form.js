@@ -16,76 +16,80 @@ export default class Form extends Component {
       homepage: "",
       mytext: "",
       check: "",
-      statusLogin: false,
-      statusEmail: false,
-      statusName: false,
-      statustimeZone: false,
-      statushomepage: false,
-      statusmytext: false,
-      statusCheck: false,
+      formErrors:{}
+      // statusLogin: false,
+      // statusEmail: false,
+      // statusName: false,
+      // statustimeZone: false,
+      // statushomepage: false,
+      // statusmytext: false,
+      // statusCheck: false,
     };
+    this.initialState=this.state
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
-  handleSubmit(e) {
-    if (this.state.login.length === 0) {
-      this.setState({ statusLogin: true });
-    } else {
-      this.setState({ statusLogin: false });
-    }
-    if (
-      this.state.email.length === 0 ||
-      !this.regEmail.test(this.state.email)
-    ) {
-      this.setState({ statusEmail: true });
-      e.preventDefault();
-    } else {
-      this.setState({ statusEmail: false });
-    }
-    if (this.state.name.length === 0) {
-      this.setState({ statusName: true });
-      e.preventDefault();
-    } else {
-      this.setState({ statusName: false });
-    }
-    if (this.state.timeZone.length === 0) {
-      this.setState({ statustimeZone: true });
-      e.preventDefault();
-    } else {
-      this.setState({ statustimeZone: false });
-    }
-    if (
-      this.state.homepage.length === 0 ||
-      !this.regUrl.test(this.state.homepage)
-    ) {
-      this.setState({ statushomepage: true });
-      e.preventDefault();
-    } else {
-      this.setState({ statushomepage: false });
-    }
-    if (this.state.mytext.length <= 50) {
-      this.setState({ statusmytext: true });
-      e.preventDefault();
-    } else {
-      this.setState({ statusmytext: false });
-    }
-    if (!this.state.check) {
-      this.setState({ statusCheck: true });
-      e.preventDefault();
-    } else {
-      this.setState({ statusCheck: false });
-    }
-    if (
-      !(this.state.statusLogin &&
-      this.state.statusEmail &&
-      this.state.statusName &&
-      this.state.statustimeZone &&
-      this.state.statushomepage &&
-      this.state.statusmytext &&
-      this.statusCheck)
-    )
-      alert("Validate form");
-  }
+ 
+  handleFormValidation() {    
+    const { login, email, name, timeZone, homepage, mytext,check} = this.state;    
+    let formErrors = {};    
+    let formIsValid = true;    
+    if (!login) {    
+        formIsValid = false;    
+        formErrors["login"] = "login field is required.";    
+    }     
+    if (!email) {    
+        formIsValid = false;    
+        formErrors["email"] = "Email id is required.";    
+    }    
+    else if (!(this.regEmail.test(email))) {    
+
+        formIsValid = false;    
+        formErrors["email"] = "Invalid email id.";    
+    }    
+
+    if (!name) {    
+      formIsValid = false;    
+      formErrors["name"] = "Name field is required.";    
+  } 
+
+    if (!timeZone) {    
+        formIsValid = false;    
+        formErrors["timeZone"] = "Time zone field is required.";    
+    }    
+
+    if (!homepage) {    
+      formIsValid = false;    
+      formErrors["homepage"] = "url is required.";    
+  }    
+  else if (!this.regUrl.test(homepage)) {    
+
+      formIsValid = false;    
+      formErrors["homepage"] = "Invalid url";    
+  }    
+
+    if (!mytext || mytext.length<50) {    
+        formIsValid = false;    
+        formErrors["mytext"] = "Minimum character is 50";    
+    }    
+
+    if (!check) {    
+        formIsValid = false;    
+        formErrors["check"] = "It must be checked";    
+    }    
+
+    this.setState({ formErrors: formErrors });    
+    return formIsValid;    
+} 
+
+handleSubmit = (e) => {    
+  e.preventDefault();    
+
+  if (this.handleFormValidation()) {    
+      alert('You have been successfully registered.')    
+      this.setState(this.initialState)    
+  }    
+}  
 
   handleChange(e) {
     if (e.target.name !== "check")
@@ -94,6 +98,7 @@ export default class Form extends Component {
   }
 
   render() {
+    const { login, email,name, timeZone,homepage,mytext,check } = this.state.formErrors; 
     return (
       <>
         <h1 className="container heading">Registration Form</h1>
@@ -107,7 +112,7 @@ export default class Form extends Component {
               name="login"
               onChange={this.handleChange}
             />
-            {this.state.statusLogin ? (
+            {login? (
               <p className="error">Login field can't be empty</p>
             ) : null}
           </div>
@@ -120,7 +125,7 @@ export default class Form extends Component {
               name="email"
               onChange={this.handleChange}
             />
-            {this.state.statusEmail ? (
+            {email ? (
               <p className="error">
                 email field can't be empty or email format isn't correct
               </p>
@@ -135,7 +140,7 @@ export default class Form extends Component {
               name="name"
               onChange={this.handleChange}
             />
-            {this.state.statusName ? (
+            {name? (
               <p className="error">name field can't be empty</p>
             ) : null}
           </div>
@@ -149,7 +154,7 @@ export default class Form extends Component {
               name="timeZone"
               onChange={this.handleChange}
             />
-            {this.state.statustimeZone ? (
+            {timeZone? (
               <p className="error">Timezone field can't be empty</p>
             ) : null}
           </div>
@@ -162,7 +167,7 @@ export default class Form extends Component {
               onChange={this.handleChange}
               name="homepage"
             />
-            {this.state.statushomepage ? (
+            {homepage ? (
               <p className="error">
                 homepage field can't be empty or url format is not correct
               </p>
@@ -172,15 +177,17 @@ export default class Form extends Component {
           <div>
             <textarea
               onChange={this.handleChange}
-              value={this.state.my}
+              value={this.state.mytext}
               name="mytext"
               data-name="textarea"
             ></textarea>
-            {this.state.statusmytext ? (
+            {mytext ? (
               <p className="error">There must be more than 50 characters</p>
             ) : null}
           </div>
           <div>
+            <div className="flex-check">
+            <span class="left">
             <input
               type="checkbox"
               data-name="checkbox"
@@ -189,7 +196,12 @@ export default class Form extends Component {
               onChange={this.handleChange}
             />
             <b>Receive notification of comments.</b>
-            {this.state.statusCheck ? (
+            </span>
+            <span class="right">
+            </span>
+
+            </div>
+            {check ? (
               <p className="error">It must be checked</p>
             ) : null}
             <p className="para">

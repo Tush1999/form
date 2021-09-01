@@ -31,7 +31,7 @@
   }
   div{
     padding-bottom: 5px;
-    margin-top: 10px;
+    padding-top: 10px;
     margin-bottom: 20px;
   }
   textarea{
@@ -41,7 +41,6 @@
   }
 
   .text {
-    padding-top: 20px;
     text-align: center;
   }
   .submit {
@@ -60,4 +59,17 @@
   }
   input{
       height:22px;
+  }
+  .para{
+    padding-top: 10px;
+  }
+  .flex-check{
+    display:flex;
+    margin-bottom: 0px;
+  }
+  .left{
+    width:32%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0px;
   }

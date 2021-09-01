@@ -16,80 +16,70 @@ export default class Form extends Component {
       homepage: "",
       mytext: "",
       check: "",
-      formErrors:{}
-      // statusLogin: false,
-      // statusEmail: false,
-      // statusName: false,
-      // statustimeZone: false,
-      // statushomepage: false,
-      // statusmytext: false,
-      // statusCheck: false,
+      formErrors: {},
     };
-    this.initialState=this.state
+    this.initialState = this.state;
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
- 
-  handleFormValidation() {    
-    const { login, email, name, timeZone, homepage, mytext,check} = this.state;    
-    let formErrors = {};    
-    let formIsValid = true;    
-    if (!login) {    
-        formIsValid = false;    
-        formErrors["login"] = "login field is required.";    
-    }     
-    if (!email) {    
-        formIsValid = false;    
-        formErrors["email"] = "Email id is required.";    
-    }    
-    else if (!(this.regEmail.test(email))) {    
 
-        formIsValid = false;    
-        formErrors["email"] = "Invalid email id.";    
-    }    
+  handleFormValidation() {
+    const { login, email, name, timeZone, homepage, mytext, check } =
+      this.state;
+    let formErrors = {};
+    let formIsValid = true;
+    if (!login) {
+      formIsValid = false;
+      formErrors["login"] = "login field is required.";
+    }
+    if (!email) {
+      formIsValid = false;
+      formErrors["email"] = "Email id is required.";
+    } else if (!this.regEmail.test(email)) {
+      formIsValid = false;
+      formErrors["email"] = "Invalid email id.";
+    }
 
-    if (!name) {    
-      formIsValid = false;    
-      formErrors["name"] = "Name field is required.";    
-  } 
+    if (!name) {
+      formIsValid = false;
+      formErrors["name"] = "Name field is required.";
+    }
 
-    if (!timeZone) {    
-        formIsValid = false;    
-        formErrors["timeZone"] = "Time zone field is required.";    
-    }    
+    if (!timeZone) {
+      formIsValid = false;
+      formErrors["timeZone"] = "Time zone field is required.";
+    }
 
-    if (!homepage) {    
-      formIsValid = false;    
-      formErrors["homepage"] = "url is required.";    
-  }    
-  else if (!this.regUrl.test(homepage)) {    
+    if (!homepage) {
+      formIsValid = false;
+      formErrors["homepage"] = "url is required.";
+    } else if (!this.regUrl.test(homepage)) {
+      formIsValid = false;
+      formErrors["homepage"] = "Invalid url";
+    }
 
-      formIsValid = false;    
-      formErrors["homepage"] = "Invalid url";    
-  }    
+    if (!mytext || mytext.length < 50) {
+      formIsValid = false;
+      formErrors["mytext"] = "Minimum character is 50";
+    }
 
-    if (!mytext || mytext.length<50) {    
-        formIsValid = false;    
-        formErrors["mytext"] = "Minimum character is 50";    
-    }    
+    if (!check) {
+      formIsValid = false;
+      formErrors["check"] = "It must be checked";
+    }
 
-    if (!check) {    
-        formIsValid = false;    
-        formErrors["check"] = "It must be checked";    
-    }    
+    this.setState({ formErrors: formErrors });
+    return formIsValid;
+  }
 
-    this.setState({ formErrors: formErrors });    
-    return formIsValid;    
-} 
+  handleSubmit = (e) => {
+    e.preventDefault();
 
-handleSubmit = (e) => {    
-  e.preventDefault();    
-
-  if (this.handleFormValidation()) {    
-      alert('You have been successfully registered.')    
-      this.setState(this.initialState)    
-  }    
-}  
+    if (this.handleFormValidation()) {
+      alert("You have been successfully registered.");
+      this.setState(this.initialState);
+    }
+  };
 
   handleChange(e) {
     if (e.target.name !== "check")
@@ -98,7 +88,8 @@ handleSubmit = (e) => {
   }
 
   render() {
-    const { login, email,name, timeZone,homepage,mytext,check } = this.state.formErrors; 
+    const { login, email, name, timeZone, homepage, mytext, check } =
+      this.state.formErrors;
     return (
       <>
         <h1 className="container heading">Registration Form</h1>
@@ -112,9 +103,7 @@ handleSubmit = (e) => {
               name="login"
               onChange={this.handleChange}
             />
-            {login? (
-              <p className="error">Login field can't be empty</p>
-            ) : null}
+            {login ? <p className="error">Login field can't be empty</p> : null}
           </div>
           <div>
             <label htmlFor="email">Email</label>
@@ -140,9 +129,7 @@ handleSubmit = (e) => {
               name="name"
               onChange={this.handleChange}
             />
-            {name? (
-              <p className="error">name field can't be empty</p>
-            ) : null}
+            {name ? <p className="error">name field can't be empty</p> : null}
           </div>
           <div>
             <label htmlFor="time-zone">Timezone</label>
@@ -154,7 +141,7 @@ handleSubmit = (e) => {
               name="timeZone"
               onChange={this.handleChange}
             />
-            {timeZone? (
+            {timeZone ? (
               <p className="error">Timezone field can't be empty</p>
             ) : null}
           </div>
@@ -187,23 +174,19 @@ handleSubmit = (e) => {
           </div>
           <div>
             <div className="flex-check">
-            <span class="left">
-            <input
-              type="checkbox"
-              data-name="checkbox"
-              name="check"
-              value={this.state.check}
-              onChange={this.handleChange}
-            />
-            <b>Receive notification of comments.</b>
-            </span>
-            <span class="right">
-            </span>
-
+              <span class="left">
+                <input
+                  type="checkbox"
+                  data-name="checkbox"
+                  name="check"
+                  value={this.state.check}
+                  onChange={this.handleChange}
+                />
+                <b>Receive notification of comments.</b>
+              </span>
+              <span class="right"></span>
             </div>
-            {check ? (
-              <p className="error">It must be checked</p>
-            ) : null}
+            {check ? <p className="error">It must be checked</p> : null}
             <p className="para">
               You will be sent an email when someone posts comments to your Blog
               or Album
